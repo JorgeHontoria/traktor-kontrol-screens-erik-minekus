@@ -1,4 +1,4 @@
-# Display modifications for the Traktor Kontrol S8/S5/D2
+# Display modifications for the Traktor Kontrol S8/S5/D2 compatible with 3.10 and 3.11
 
 **Changes in appearance:**
 
