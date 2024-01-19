@@ -209,30 +209,6 @@ Item {
     color:               (header.currentDeck < 2) ? colors.colorDeckBlueBright : colors.colorWhite
   }
 
-  //--------------------------------------------------------------------------------------------------------------------
-  // black border & shadow
-
-  Rectangle {
-    id: browserHeaderBlackBottomLine
-    anchors.left:  parent.left
-    anchors.right: parent.right
-    anchors.top:   browserHeaderBg.bottom 
-    height:        2
-    color:         colors.colorBlack
-  }
-
-   Rectangle {    
-    id: browserHeaderBottomGradient
-    anchors.left:  parent.left
-    anchors.right: parent.right
-    anchors.top:   browserHeaderBlackBottomLine.bottom 
-    height:  3
-    gradient: Gradient {
-      GradientStop { position: 0.0; color: colors.colorBlack38 }
-      GradientStop { position: 1.0; color: colors.colorBlack0 }
-    }
-  }
-
  //--------------------------------------------------------------------------------------------------------------------
     
   state: "show"  

@@ -69,14 +69,4 @@ Item {
       }
     }
   }
-
-  function getHeaderTexts()
-  {
-    if (patternPlayerEnabled.value && fxViewSelectProp.value == FxType.PatternPlayer)
-    {
-      return [fxUnitName, patternPlayerKitSelection.description, "", ""];
-    }
-
-    return [fxUnitName, fxSelectProp1.description, fxSelectProp2.description, fxSelectProp3.description];
-  }
 }
