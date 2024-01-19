@@ -19,7 +19,9 @@ import './Widgets/' as Widgets
 Item {
   id: screen
 
-  property bool  isLeftScreen:    true
+  property int side: ScreenSide.Left;
+  readonly property bool isLeftScreen: (screen.side == ScreenSide.Left)
+
   property string settingsPath: ""
   property string propertiesPath: ""
   property var flavor
@@ -74,6 +76,7 @@ Item {
   Defines.Utils  {id: utils}
   Defines.Colors {id: colors}
   Defines.Durations {id: durations}
+  Defines.Prefs {id: prefs}
 
   width:  480
   height: 272
@@ -143,7 +146,7 @@ Item {
     id: topControls
     fxUnit:        (isLeftScreen ? 0 : 1)
     showHideState: topInfoShown.value ? "show" : "hide"
-    sizeState: "large" // deckView.isDawDeckStyleFocus ? "small" : "large"
+    sizeState: deckView.isDawDeckStyleFocus ? "small" : "large"
   }
 
   // bottom overlay
