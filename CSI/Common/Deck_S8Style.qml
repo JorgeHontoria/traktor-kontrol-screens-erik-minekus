@@ -14,9 +14,6 @@ Module
   property alias  deckFocus:       deckFocusProp.value
 
   property bool   keyOrBPMOverlay: false;
-  property bool   tempBPMOverlay:  false;
-
-  readonly property double syncPhase: (syncPhaseProp.value * 2.0).toFixed(2)
 
   //------------------------------------------------------------------------------------------------------------------
 
@@ -50,7 +47,6 @@ Module
 
   AppProperty { id: masterDeckIdProp; path: "app.traktor.masterclock.source_id" }
   AppProperty { id: isTempoSynced;    path: "app.traktor.decks." + (focusedDeckId) + ".sync.enabled" }
-  AppProperty { id: syncPhaseProp;    path: "app.traktor.decks." + (focusedDeckId) + ".tempo.phase"; }
 
   AppProperty { 
     path: "app.traktor.masterclock.tempo"; 
@@ -67,7 +63,7 @@ Module
 
   Timer {
     id: overlay_countdown;
-    interval: 5000;
+    interval: 3000;
     onTriggered:
     {
       if (keyOrBPMOverlay) {
@@ -512,8 +508,8 @@ Module
   // WAVEFORM ZOOM LEVEL
   //------------------------------------------------------------------------------------------------------------------
 
-  MappingPropertyDescriptor { path: settingsPath + ".top.waveform_zoom";       type: MappingPropertyDescriptor.Integer;   value: 9;   min: 0;  max: 9;   }
-  MappingPropertyDescriptor { path: settingsPath + ".bottom.waveform_zoom";    type: MappingPropertyDescriptor.Integer;   value: 9;   min: 0;  max: 9;   }
+  MappingPropertyDescriptor { path: settingsPath + ".top.waveform_zoom";       type: MappingPropertyDescriptor.Integer;   value: 7;   min: 0;  max: 9;   }
+  MappingPropertyDescriptor { path: settingsPath + ".bottom.waveform_zoom";    type: MappingPropertyDescriptor.Integer;   value: 7;   min: 0;  max: 9;   }
 
   //------------------------------------------------------------------------------------------------------------------
   // STEM DECK STYLE (Track- or DAW-deck style)
@@ -981,7 +977,7 @@ Module
 
   /////////////////////////
 
-  Blinker { name: "ScreenViewBlinker";  cycle: 1000; defaultBrightness: onBrightness; blinkBrightness: dimmedBrightness }
+  Blinker { name: "ScreenViewBlinker";  cycle: 300; defaultBrightness: onBrightness; blinkBrightness: dimmedBrightness }
 
   Wire { from: "%surface%.display.buttons.5.value";  to: ButtonScriptAdapter { onPress: handleViewButton(); } }
   Wire { from: "%surface%.display.buttons.5.led";    to: "ScreenViewBlinker"  }
@@ -1114,7 +1110,7 @@ Module
     Wire { to: "ShowDisplayButtonArea_ButtonAdapter.input"; from: "%surface%.display.buttons.7" }
   }
 
-  SwitchTimer { name: "BrowserBackTimer"; setTimeout: 500 }
+  SwitchTimer { name: "BrowserBackTimer"; setTimeout: 1000 }
   Wire { from: "%surface%.back";                to: "BrowserBackTimer.input" }
   Wire { from: "BrowserBackTimer.output"; to: SetPropertyAdapter { path: propertiesPath + ".screen_view"; value: ScreenView.deck } enabled: module.screenView.value == ScreenView.browser }
 
@@ -1139,7 +1135,7 @@ Module
   SwitchTimer
   {
     name: "BrowserLeaveTimer"
-    resetTimeout: 2000
+    resetTimeout: 1000
 
     onSet:
     {
@@ -1299,7 +1295,7 @@ Module
 
           TransportSection { name: "transport"; channel: 1 }
           Scratch     { name: "scratch";    channel: 1; ledBarSize: touchstripLedBarSize }
-          TempoBend   { name: "tempo_bend"; channel: 1; ledBarSize: touchstripLedBarSize }
+          TouchstripTempoBend   { name: "tempo_bend"; channel: 1; ledBarSize: touchstripLedBarSize }
           TouchstripTrackSeek   { name: "track_seek"; channel: 1; ledBarSize: touchstripLedBarSize }
 
           Loop { name: "loop";  channel: 1; numberOfLeds: 4; color: Color.Blue }
@@ -1325,7 +1321,7 @@ Module
 
           TransportSection { name: "transport"; channel: 2 }
           Scratch     { name: "scratch";    channel: 2; ledBarSize: touchstripLedBarSize }
-          TempoBend   { name: "tempo_bend"; channel: 2; ledBarSize: touchstripLedBarSize }
+          TouchstripTempoBend   { name: "tempo_bend"; channel: 2; ledBarSize: touchstripLedBarSize }
           TouchstripTrackSeek   { name: "track_seek"; channel: 2; ledBarSize: touchstripLedBarSize }
 
           Loop { name: "loop";  channel: 2; numberOfLeds: 4; color: Color.Blue }
@@ -1352,7 +1348,7 @@ Module
 
           TransportSection { name: "transport"; channel: 3 }
           Scratch     { name: "scratch";    channel: 3; ledBarSize: touchstripLedBarSize }
-          TempoBend   { name: "tempo_bend"; channel: 3; ledBarSize: touchstripLedBarSize }
+          TouchstripTempoBend   { name: "tempo_bend"; channel: 3; ledBarSize: touchstripLedBarSize }
           TouchstripTrackSeek   { name: "track_seek"; channel: 3; ledBarSize: touchstripLedBarSize }
 
           Loop { name: "loop";  channel: 3; numberOfLeds: 4; color: Color.White }
@@ -1379,7 +1375,7 @@ Module
 
           TransportSection { name: "transport"; channel: 4 }
           Scratch     { name: "scratch";    channel: 4; ledBarSize: touchstripLedBarSize }
-          TempoBend   { name: "tempo_bend"; channel: 4; ledBarSize: touchstripLedBarSize }
+          TouchstripTempoBend   { name: "tempo_bend"; channel: 4; ledBarSize: touchstripLedBarSize }
           TouchstripTrackSeek   { name: "track_seek"; channel: 4; ledBarSize: touchstripLedBarSize }
 
           Loop { name: "loop";  channel: 4; numberOfLeds: 4; color: Color.White }
@@ -1407,8 +1403,8 @@ Module
           enabled: focusedDeckId == 1
 
           Wire { from: "%surface%.back";   to: "decks.1.tempo.reset" }
-          Wire { from: "%surface%.browse"; to: "decks.1.tempo.fine";   enabled:  module.shift }
-          Wire { from: "%surface%.browse"; to: "decks.1.tempo.coarse"; enabled: !module.shift }
+          Wire { from: "%surface%.browse"; to: "decks.1.tempo.fine";   enabled: !module.shift }
+          Wire { from: "%surface%.browse"; to: "decks.1.tempo.coarse"; enabled:  module.shift }
         }
 
         // Deck B
@@ -1417,8 +1413,8 @@ Module
           enabled: focusedDeckId == 2
 
           Wire { from: "%surface%.back";   to: "decks.2.tempo.reset" }
-          Wire { from: "%surface%.browse"; to: "decks.2.tempo.fine";   enabled:  module.shift }
-          Wire { from: "%surface%.browse"; to: "decks.2.tempo.coarse"; enabled: !module.shift }
+          Wire { from: "%surface%.browse"; to: "decks.2.tempo.fine";   enabled: !module.shift }
+          Wire { from: "%surface%.browse"; to: "decks.2.tempo.coarse"; enabled:  module.shift }
         }
 
         // Deck C
@@ -1427,8 +1423,8 @@ Module
           enabled: focusedDeckId == 3
 
           Wire { from: "%surface%.back";   to: "decks.3.tempo.reset" }
-          Wire { from: "%surface%.browse"; to: "decks.3.tempo.fine";   enabled:  module.shift }
-          Wire { from: "%surface%.browse"; to: "decks.3.tempo.coarse"; enabled: !module.shift }
+          Wire { from: "%surface%.browse"; to: "decks.3.tempo.fine";   enabled: !module.shift }
+          Wire { from: "%surface%.browse"; to: "decks.3.tempo.coarse"; enabled:  module.shift }
         }
 
         // Deck D
@@ -1437,8 +1433,8 @@ Module
           enabled: focusedDeckId == 4
 
           Wire { from: "%surface%.back";   to: "decks.4.tempo.reset" }
-          Wire { from: "%surface%.browse"; to: "decks.4.tempo.fine";   enabled:  module.shift }
-          Wire { from: "%surface%.browse"; to: "decks.4.tempo.coarse"; enabled: !module.shift }
+          Wire { from: "%surface%.browse"; to: "decks.4.tempo.fine";   enabled: !module.shift }
+          Wire { from: "%surface%.browse"; to: "decks.4.tempo.coarse"; enabled:  module.shift }
         }
       }
 
@@ -2581,7 +2577,7 @@ Module
       Blinker { name: "loop_encoder_blinker_white"; ledCount: 4; autorun: true; color: Color.White }
 
       // Deck A
-      SwitchTimer { name: "DeckA_ShowLoopSizeTouchTimer"; setTimeout: 50 }
+      SwitchTimer { name: "DeckA_ShowLoopSizeTouchTimer"; setTimeout: 500 }
 
       WiresGroup
       {
@@ -2670,7 +2666,7 @@ Module
       }
 
       // Deck C
-      SwitchTimer { name: "DeckC_ShowLoopSizeTouchTimer"; setTimeout: 50 }
+      SwitchTimer { name: "DeckC_ShowLoopSizeTouchTimer"; setTimeout: 500 }
 
       WiresGroup
       {
@@ -2758,7 +2754,7 @@ Module
       }
 
       // Deck B
-      SwitchTimer { name: "DeckB_ShowLoopSizeTouchTimer"; setTimeout: 50 }
+      SwitchTimer { name: "DeckB_ShowLoopSizeTouchTimer"; setTimeout: 500 }
 
       WiresGroup
       {
@@ -2846,7 +2842,7 @@ Module
       }
 
       // Deck D
-      SwitchTimer { name: "DeckD_ShowLoopSizeTouchTimer"; setTimeout: 50 }
+      SwitchTimer { name: "DeckD_ShowLoopSizeTouchTimer"; setTimeout: 500 }
 
       WiresGroup
       {
@@ -3859,7 +3855,6 @@ Module
       {
         enabled: hasWaveform(deckAType) && !module.shift
 
-        Wire { from: "%surface%.browse.turn"; to: RelativePropertyAdapter { path: settingsPath + ".top.waveform_zoom"; step: -1; mode: RelativeMode.Stepped } enabled: screenOverlay.value == Overlay.none }
         Wire { from: "%surface%.display.buttons.6"; to: RelativePropertyAdapter { path: settingsPath + ".top.waveform_zoom"; mode: RelativeMode.Decrement } }
         Wire { from: "%surface%.display.buttons.7"; to: RelativePropertyAdapter { path: settingsPath + ".top.waveform_zoom"; mode: RelativeMode.Increment } }
       }
@@ -3915,7 +3910,6 @@ Module
       {
         enabled: hasWaveform(deckBType) && !module.shift
 
-        Wire { from: "%surface%.browse.turn"; to: RelativePropertyAdapter { path: settingsPath + ".top.waveform_zoom"; step: -1; mode: RelativeMode.Stepped } enabled: screenOverlay.value == Overlay.none }
         Wire { from: "%surface%.display.buttons.6"; to: RelativePropertyAdapter { path: settingsPath + ".top.waveform_zoom"; mode: RelativeMode.Decrement } }
         Wire { from: "%surface%.display.buttons.7"; to: RelativePropertyAdapter { path: settingsPath + ".top.waveform_zoom"; mode: RelativeMode.Increment } }
       }
@@ -3971,7 +3965,6 @@ Module
       {
         enabled: hasWaveform(deckCType) && !module.shift
 
-        Wire { from: "%surface%.browse.turn"; to: RelativePropertyAdapter { path: settingsPath + ".bottom.waveform_zoom"; step: -1; mode: RelativeMode.Stepped } enabled: screenOverlay.value == Overlay.none }
         Wire { from: "%surface%.display.buttons.6"; to: RelativePropertyAdapter { path: settingsPath + ".bottom.waveform_zoom"; mode: RelativeMode.Decrement } }
         Wire { from: "%surface%.display.buttons.7"; to: RelativePropertyAdapter { path: settingsPath + ".bottom.waveform_zoom"; mode: RelativeMode.Increment } }
       }
@@ -4027,7 +4020,6 @@ Module
       {
         enabled: hasWaveform(deckDType) && !module.shift
 
-        Wire { from: "%surface%.browse.turn"; to: RelativePropertyAdapter { path: settingsPath + ".bottom.waveform_zoom"; step: -1; mode: RelativeMode.Stepped } enabled: screenOverlay.value == Overlay.none }
         Wire { from: "%surface%.display.buttons.6"; to: RelativePropertyAdapter { path: settingsPath + ".bottom.waveform_zoom"; mode: RelativeMode.Decrement } }
         Wire { from: "%surface%.display.buttons.7"; to: RelativePropertyAdapter { path: settingsPath + ".bottom.waveform_zoom"; mode: RelativeMode.Increment } }
       }
@@ -4109,6 +4101,7 @@ Module
 
       Wire { from: "%surface%.play"; to: "decks.1.transport.play" }
       Wire { from: "%surface%.cue";  to: "decks.1.transport.cue"  }
+      Wire { from: "%surface%.sync"; to: "decks.1.transport.sync"; enabled: (editMode.value != editModeArmed) && (editMode.value != editModeUsed) }
     }
 
     WiresGroup
@@ -4117,6 +4110,7 @@ Module
 
       Wire { from: "%surface%.play"; to: "decks.1.transport.timecode"     }
       Wire { from: "%surface%.cue";  to: "decks.1.transport.return_to_zero" }
+      Wire { from: "%surface%.sync"; to: "decks.1.transport.master"; enabled: (editMode.value != editModeArmed) && (editMode.value != editModeUsed) }
     }
 
     WiresGroup
@@ -4165,6 +4159,7 @@ Module
 
       Wire { from: "%surface%.play"; to: "decks.2.transport.play" }
       Wire { from: "%surface%.cue";  to: "decks.2.transport.cue"  }
+      Wire { from: "%surface%.sync"; to: "decks.2.transport.sync"; enabled: (editMode.value != editModeArmed) && (editMode.value != editModeUsed) }
     }
 
     WiresGroup
@@ -4173,6 +4168,7 @@ Module
 
       Wire { from: "%surface%.play"; to: "decks.2.transport.timecode"     }
       Wire { from: "%surface%.cue";  to: "decks.2.transport.return_to_zero" }
+      Wire { from: "%surface%.sync"; to: "decks.2.transport.master"; enabled: (editMode.value != editModeArmed) && (editMode.value != editModeUsed) }
     }
 
     WiresGroup
@@ -4221,6 +4217,7 @@ Module
 
       Wire { from: "%surface%.play"; to: "decks.3.transport.play" }
       Wire { from: "%surface%.cue";  to: "decks.3.transport.cue"  }
+      Wire { from: "%surface%.sync"; to: "decks.3.transport.sync"; enabled: (editMode.value != editModeArmed) && (editMode.value != editModeUsed) }
     }
 
     WiresGroup
@@ -4229,6 +4226,7 @@ Module
 
       Wire { from: "%surface%.play"; to: "decks.3.transport.timecode"     }
       Wire { from: "%surface%.cue";  to: "decks.3.transport.return_to_zero" }
+      Wire { from: "%surface%.sync"; to: "decks.3.transport.master"; enabled: (editMode.value != editModeArmed) && (editMode.value != editModeUsed) }
     }
 
     WiresGroup
@@ -4277,6 +4275,7 @@ Module
 
       Wire { from: "%surface%.play"; to: "decks.4.transport.play" }
       Wire { from: "%surface%.cue";  to: "decks.4.transport.cue"  }
+      Wire { from: "%surface%.sync"; to: "decks.4.transport.sync"; enabled: (editMode.value != editModeArmed) && (editMode.value != editModeUsed) }
     }
 
     WiresGroup
@@ -4285,6 +4284,7 @@ Module
 
       Wire { from: "%surface%.play"; to: "decks.4.transport.timecode"     }
       Wire { from: "%surface%.cue";  to: "decks.4.transport.return_to_zero" }
+      Wire { from: "%surface%.sync"; to: "decks.4.transport.master"; enabled: (editMode.value != editModeArmed) && (editMode.value != editModeUsed) }
     }
 
     WiresGroup
@@ -4311,30 +4311,6 @@ Module
       Wire { from: "%surface%.touchstrip";       to: "decks.4.tempo_bend"       }
       Wire { from: "%surface%.touchstrip.leds";  to: "decks.4.tempo_bend.leds"  }
     }
-  }
-
-  SwitchTimer { name: "TempBPMOverlay_Switch"; setTimeout: 250 }
-
-  Wire { from: "%surface%.sync"; to: ButtonScriptAdapter { brightness: (isTempoSynced.value ? onBrightness : dimmedBrightness); color: ((!isTempoSynced.value || (syncPhase >= -0.01 && syncPhase <= 0.01)) ? Color.Green : Color.Red); onRelease: onSyncReleased(); } enabled: (editMode.value != editModeArmed) && (editMode.value != editModeUsed) && !module.shift }
-  Wire { from: "%surface%.sync"; to: ButtonScriptAdapter { brightness: ((masterDeckIdProp.value == focusedDeckId - 1) ? onBrightness : dimmedBrightness); color: Color.Green; onRelease: onSyncReleased(); } enabled: (editMode.value != editModeArmed) && (editMode.value != editModeUsed) && module.shift }
-  Wire { from: "%surface%.sync"; to: "TempBPMOverlay_Switch.input" }
-  Wire { from: "TempBPMOverlay_Switch.output"; to: ButtonScriptAdapter { onPress: { screenOverlay.value = Overlay.bpm; tempBPMOverlay = true; } } }
-
-  function onSyncReleased()
-  {
-    if (tempBPMOverlay)
-    {
-      screenOverlay.value = Overlay.none;
-      tempBPMOverlay = false;
-      return;
-    }
-    if (module.shift)
-    {
-      masterDeckIdProp.value = focusedDeckId - 1;
-      return;
-    }
-
-    isTempoSynced.value = !isTempoSynced.value;
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -4615,7 +4591,5 @@ Module
     }
   }
 
-  /* #ifdef DEVELOPMENT_MODE
-  Wire { from: "%surface%.fx.select"; to: TriggerPropertyAdapter  { path:"app.traktor.debug.take_screenshot" } enabled: module.shift }
-  #endif */
+  
 }

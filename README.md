@@ -1,4 +1,4 @@
-# Display modifications for the Traktor Kontrol S8/S5/D2
+# Replacement screens for **Traktor Pro 3.10 and 3.11** and **Kontrol D2/S5/S8 and S4 MK3**
 
 **Changes in appearance:**
 
