@@ -12,7 +12,12 @@ Item {
   property color  deckColor:       colors.colorBgEmpty // transparent blue not possible for logo due to low bit depth of displays. was: // (deckId < 2) ? colors.colorDeckBlueBright12Full : colors.colorBgEmpty
   property bool   trackIsLoaded:   (primaryKey.value > 0)
   
+  readonly property variant deckLetters: ["A", "B", "C", "D"]
+
   readonly property int waveformHeight: (deckSizeState == "small") ? 0 : ( parent ? ( (deckSizeState == "medium") ? (parent.height-83) : (parent.height-83) ) : 0 )
+
+  readonly property int largeDeckBottomMargin: (waveformContainer.isStemStyleDeck) ? 6 : 6  
+  readonly property int smallDeckBottomMargin: (deckId > 1) ? 9 : 6
 
   property bool showLoopSize: false
   property int  zoomLevel:    1
@@ -23,11 +28,14 @@ Item {
   readonly property int minSampleWidth: 0x800
   readonly property int sampleWidth: minSampleWidth << zoomLevel
 
+  readonly property variant hotcueColors: [colors.hotcue.hotcue, colors.colorRed, colors.hotcue.fade, colors.hotcue.load, colors.hotcue.grid, colors.hotcue.loop ]
 
   //--------------------------------------------------------------------------------------------------------------------
 
   AppProperty   { id: deckType;          path: "app.traktor.decks." + (deckId + 1) + ".type"                    }
   AppProperty   { id: primaryKey;        path: "app.traktor.decks." + (deckId + 1) + ".track.content.entry_key" }
+  AppProperty { id: trackLength;         path: "app.traktor.decks." + (deckId + 1) + ".track.content.track_length" }
+  AppProperty { id: keyLockEnabled;             path: "app.traktor.decks." + (deckId+1) + ".track.key.lock_enabled" }
 
   //--------------------------------------------------------------------------------------------------------------------
   // Waveform

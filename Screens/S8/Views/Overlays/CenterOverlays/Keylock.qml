@@ -72,14 +72,7 @@ CenterOverlay {
     font.family   :           "Pragmatica"
     color:                    keylock.keyColor
     opacity:                  (keyDisplay.value == "") ? 0 : 1
-    text: {
-      return keyDisplay.value.replace(
-        /\d+(d|m)/,
-        function (match) {
-          return keyText[match] || match;
-        }
-      );
-    }
+    text:                     prefs.camelotKey ? utils.convertToCamelot(keyDisplay.value) : keyDisplay.value
   }
 
   // value

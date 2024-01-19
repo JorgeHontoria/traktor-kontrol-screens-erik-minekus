@@ -87,11 +87,14 @@ Item {
       border.width:       borderWidth
       border.color:       colors.colorBlack50
 
-      points: [ Qt.point(0 , 8)
+      points: [ Qt.point(0 , 10)
               , Qt.point(0 , 0)
-              , Qt.point(10, 0) 
-              , Qt.point(10, 8)
-              , Qt.point(5 , 11)
+              , Qt.point(13, 0) 
+              , Qt.point(13, 10)
+              , Qt.point(7 , 14)
+              , Qt.point(7 , hotcue.smallCueHeight)
+              , Qt.point(6 , hotcue.smallCueHeight)
+              , Qt.point(6 , 14)
               ]
       Text { 
         anchors.top:        parent.top
@@ -117,11 +120,14 @@ Item {
       color:              hotcue.hotcueColor
       border.width:       borderWidth
       border.color:       colors.colorBlack50
-      points: [ Qt.point(0 , 10)
+      points: [ Qt.point(0 , 12)
               , Qt.point(0 , 0)
-              , Qt.point(13, 0)
-              , Qt.point(13, 10)
-              , Qt.point(6 , 14)
+              , Qt.point(15, 0) 
+              , Qt.point(15, 12)
+              , Qt.point(8 , 17)
+              , Qt.point(8 , hotcue.largeCueHeight)
+              , Qt.point(7 , hotcue.largeCueHeight)
+              , Qt.point(7 , 17)
               ]
       Text { 
         anchors.top:        parent.top
@@ -149,10 +155,12 @@ Item {
       border.width:       borderWidth
       border.color:       colors.colorBlack50
       points: [ Qt.point(0 , 0)
-              , Qt.point(10, 0)
-              , Qt.point(13, 4.5)
-              , Qt.point(10, 9)
-              , Qt.point(0 , 9)
+              , Qt.point(12, 0)
+              , Qt.point(15, 5.5)
+              , Qt.point(12, 11)
+              , Qt.point(1 , 11)
+              , Qt.point(1 , hotcue.smallCueHeight)
+              , Qt.point(0 , hotcue.smallCueHeight) 
               ]
       Text {
         anchors.top:        parent.top; 
@@ -179,10 +187,12 @@ Item {
       border.width:       borderWidth
       border.color:       colors.colorBlack50
       points: [ Qt.point(0 , 0)
-              , Qt.point(12, 0)
-              , Qt.point(15, 5.5)
-              , Qt.point(12, 11)
-              , Qt.point(0 , 11)
+              , Qt.point(14, 0)
+              , Qt.point(19, 6.5)
+              , Qt.point(14, 13)
+              , Qt.point(1 , 13)
+              , Qt.point(1 , hotcue.largeCueHeight) 
+              , Qt.point(0 , hotcue.largeCueHeight) 
               ]
       Text {
         anchors.top:        parent.top;         
@@ -209,10 +219,12 @@ Item {
       color:               hotcue.hotcueColor   
       border.width:        borderWidth
       border.color:        colors.colorBlack50
-      points: [ Qt.point(-0.4, 9)
-              , Qt.point(3 , 0)
-              , Qt.point(13, 0) 
-              , Qt.point(13, 9)
+      points: [ Qt.point(-0.4, 11)
+              , Qt.point(5 , 0)
+              , Qt.point(17, 0) 
+              , Qt.point(17, hotcue.smallCueHeight)
+              , Qt.point(16, hotcue.smallCueHeight)
+              , Qt.point(16, 11)
               ]
 
       Text {
@@ -239,10 +251,12 @@ Item {
       color:               hotcue.hotcueColor   
       border.width:        borderWidth
       border.color:        colors.colorBlack50
-      points: [ Qt.point(-0.4, 11)
-              , Qt.point(5 , 0)
-              , Qt.point(16, 0)
-              , Qt.point(16, 11)
+      points: [ Qt.point(-0.4 , 13)
+              , Qt.point(6 , 0)
+              , Qt.point(20, 0) 
+              , Qt.point(20, hotcue.largeCueHeight)
+              , Qt.point(19, hotcue.largeCueHeight)
+              , Qt.point(19, 13)
               ]
 
       Text {
@@ -271,9 +285,11 @@ Item {
       border.width:       borderWidth
       border.color:       colors.colorBlack50
       points: [ Qt.point(0, 0)
-              , Qt.point(10, 0)
-              , Qt.point(13, 9)
-              , Qt.point(0, 9)
+              , Qt.point(12, 0)
+              , Qt.point(17, 11)
+              , Qt.point(1, 11)
+              , Qt.point(1, hotcue.smallCueHeight)
+              , Qt.point(0, hotcue.smallCueHeight)
               ]
       Text { 
         anchors.top:        parent.top
@@ -300,9 +316,11 @@ Item {
       border.width:       borderWidth
       border.color:       colors.colorBlack50
       points: [ Qt.point(0, 0)
-              , Qt.point(12, 0)
-              , Qt.point(16, 11)
-              , Qt.point(0, 11)
+              , Qt.point(14, 0)
+              , Qt.point(20, 13)
+              , Qt.point(1, 13)
+              , Qt.point(1, hotcue.largeCueHeight)
+              , Qt.point(0, hotcue.largeCueHeight)
               ]
       Text { 
         anchors.top:        parent.top
@@ -325,6 +343,16 @@ Item {
       anchors.horizontalCenter:  cueLoader.horizontalCenter
       clip:               false
 
+      // pole border
+      Rectangle {
+        anchors.top:              circle.bottom
+        anchors.horizontalCenter: circle.horizontalCenter
+        anchors.leftMargin:       4
+        width:                    3
+        height:                   18
+        color:                    colors.colorBlack50
+      }
+      
       // round head
       Rectangle {
         id: circle
@@ -348,6 +376,16 @@ Item {
           font.pixelSize:     fonts.miniFontSize
         }
       }
+            // pole
+      Rectangle {
+        anchors.top:              circle.bottom
+        anchors.horizontalCenter: circle.horizontalCenter
+        anchors.leftMargin:       5
+        anchors.topMargin:        -1
+        width:                    1
+        height:                   18
+        color:                    hotcue.hotcueColor
+      }
 
     }
   }
@@ -362,6 +400,16 @@ Item {
       height:             cueLoader.height
       clip:               false
 
+      // pole border
+      Rectangle {
+        anchors.top:              circle.bottom
+        anchors.horizontalCenter: circle.horizontalCenter
+        anchors.leftMargin:       4
+        width:                    3
+        height:                   hotcue.height - circle.height + 1
+        color:                    colors.colorBlack50
+      }
+      
       // round head
       Rectangle {
         id: circle
@@ -385,6 +433,17 @@ Item {
           font.pixelSize:     fonts.miniFontSize
         }
       }
+
+      // pole
+      Rectangle {
+        anchors.top:              circle.bottom
+        anchors.horizontalCenter: circle.horizontalCenter
+        anchors.topMargin:        -2
+        anchors.leftMargin:       5
+        width:                    1
+        height:                   hotcue.height - circle.height + 2
+        color:                    hotcue.hotcueColor
+      }
     }
   }
 
@@ -405,10 +464,12 @@ Item {
         color:             hotcue.hotcueColor   
         border.width:       borderWidth
         border.color:       colors.colorBlack50
-        points: [ Qt.point(0 , 9)
+        points: [ Qt.point(0 , 11)
                 , Qt.point(0 , 0)
-                , Qt.point(10, 0)
-                , Qt.point(10, 9)
+                , Qt.point(14, 0)
+                , Qt.point(14, hotcue.smallCueHeight)
+                , Qt.point(13, hotcue.smallCueHeight)
+                , Qt.point(13, 11)
                 ]
 
         Text { 
@@ -433,9 +494,11 @@ Item {
         border.width:       borderWidth
         border.color:       colors.colorBlack50
         points: [ Qt.point(0, 0)
-                , Qt.point(10, 0)
-                , Qt.point(10, 9)
-                , Qt.point(0, 9)
+                , Qt.point(14, 0)
+                , Qt.point(14, 11)
+                , Qt.point(1, 11)
+                , Qt.point(1, hotcue.smallCueHeight) 
+                , Qt.point(0, hotcue.smallCueHeight)
                 ]
       }
     }
@@ -458,10 +521,12 @@ Item {
         border.width:       borderWidth 
         border.color:       colors.colorBlack50
   
-        points: [ Qt.point(0 , 11)
+        points: [ Qt.point(0 , 13)
                 , Qt.point(0 , 0)
-                , Qt.point(14, 0)
-                , Qt.point(14, 11)
+                , Qt.point(16, 0)
+                , Qt.point(16, hotcue.largeCueHeight)
+                , Qt.point(15, hotcue.largeCueHeight)
+                , Qt.point(15, 13)
                 ]
 
         Text { 
@@ -484,9 +549,11 @@ Item {
         border.width:       borderWidth
         border.color:       colors.colorBlack50
         points: [ Qt.point(0, 0)
-                , Qt.point(14, 0)
-                , Qt.point(14, 11)
-                , Qt.point(0, 11)
+                , Qt.point(16, 0)
+                , Qt.point(16, 13)
+                , Qt.point(1, 13)
+                , Qt.point(1, hotcue.largeCueHeight)
+                , Qt.point(0, hotcue.largeCueHeight)
                 ]
       }
     }

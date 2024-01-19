@@ -22,12 +22,12 @@ Item {
     anchors.fill: parent
     Repeater {
       model: 4
-      
+
       Rectangle {
         width: ( index == 0 ) ? 120 : 119 // 1st tab 1px wider
         height: 19
         color: (hasFocus && index==fxSelect.activeTab) ? colors.colorOrange : colors.colorFxHeaderBg
-        
+
         readonly property bool isMacroFx: (headerNames[index].charCodeAt(0) == macroEffectChar)
 
         Rectangle {
@@ -49,25 +49,34 @@ Item {
             font.pixelSize: fonts.miniFontSize
             color: (hasFocus && index == fxSelect.activeTab) ? colors.colorOrange : colors.colorBlack
             visible: isMacroFx && ( (index<2) || (fxViewSelectProp.value==FxType.Group) )
-
           }
         }
 
-          Text {
-            visible: (index<2) || (fxViewSelectProp.value==FxType.Group)
-            anchors.centerIn: parent
-            anchors.fill: parent
-            anchors.topMargin: 2
-            anchors.leftMargin: (headerNames[index].charCodeAt(0) == macroEffectChar)? 20 : 5
-            anchors.rightMargin: 3
-            font.pixelSize: fonts.smallFontSize
-            font.capitalization: Font.AllUppercase
-            color: (hasFocus && index==fxSelect.activeTab) ? colors.colorBlack : colors.colorFontBrowserHeader
-            text: isMacroFx? headerNames[index].substr(1) : headerNames[index]
-            clip: true
-            elide: Text.ElideRight
-          }
+        Text {
+          visible: (index<2) || (fxViewSelectProp.value==FxType.Group)
+          anchors.centerIn: parent
+          anchors.fill: parent
+          anchors.topMargin: 2
+          anchors.leftMargin: (headerNames[index].charCodeAt(0) == macroEffectChar)? 20 : 5
+          anchors.rightMargin: 3
+          font.pixelSize: fonts.smallFontSize
+          font.capitalization: Font.AllUppercase
+          color: (hasFocus && index==fxSelect.activeTab) ? colors.colorBlack : colors.colorFontBrowserHeader
+          text: isMacroFx ? headerNames[index].substr(1) : headerNames[index]
+          clip: true
+          elide: Text.ElideRight
         }
       }
     }
   }
+
+  function getHeaderTexts()
+  {
+    if (patternPlayerEnabled.value && fxViewSelectProp.value == FxType.PatternPlayer)
+    {
+      return [fxUnitName, patternPlayerKitSelection.description, "", ""];
+    }
+
+    return [fxUnitName, fxSelectProp1.description, fxSelectProp2.description, fxSelectProp3.description];
+  }
+}
