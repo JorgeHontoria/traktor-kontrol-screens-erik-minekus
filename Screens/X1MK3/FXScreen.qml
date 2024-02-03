@@ -54,7 +54,7 @@ Item {
   AppProperty { id: fxParameterValue3; path: "app.traktor.fx." + fxUnitIdx + ".parameters.3" }
 
   // Pattern Player properties
-  AppProperty { id: currentKit;   path: "app.traktor.fx." + fxUnitIdx + ".kitSelect" }
+  AppProperty { id: currentKit;   path: "app.traktor.fx." + fxUnitIdx + ".pattern_player.kit_shortname" }
   AppProperty { id: currentStep;  path: "app.traktor.fx." + fxUnitIdx + ".pattern_player.current_step" }
   AppProperty { id: currentSound; path: "app.traktor.fx." + fxUnitIdx + ".pattern_player.current_sound" }
 
@@ -300,7 +300,7 @@ Item {
       // Pattern Player view
       Item
       {
-        visible: isPatternPlayer && !knobsAreActive
+        visible: isPatternPlayer && (!knobsAreActive || lastTouchedKnob == 2)
         anchors.fill: parent
 
         Repeater
@@ -345,7 +345,7 @@ Item {
       // Parameter overlay
       Item
       {
-        visible: knobsAreActive || !isPatternPlayer
+        visible: !(isPatternPlayer && (!knobsAreActive || lastTouchedKnob == 2))
         anchors.fill: parent
 
         Image {

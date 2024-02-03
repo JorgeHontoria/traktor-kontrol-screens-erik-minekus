@@ -17,6 +17,7 @@ Module
 
   Hotcues { name: "hotcues"; channel: module.deckIdx }
   RemixDeckSlots { name: "remix_slots"; channel: module.deckIdx }
+  ButtonTempoBend { name: "tempo_bend"; channel: module.deckIdx }
 
   AppProperty { id: deckTypeProp; path: "app.traktor.decks." + module.deckIdx + ".type" }
 
@@ -55,6 +56,14 @@ Module
   
       Wire { from: "%surface%.hotcues.1"; to: "hotcues.7.trigger" }
       Wire { from: "%surface%.hotcues.2"; to: "hotcues.8.trigger" }
+    }
+
+    WiresGroup
+    {
+      enabled: !module.shift && (hotcue12PushAction == HotcueAction.tempo_bend)
+
+      Wire { from: "%surface%.hotcues.1"; to: "tempo_bend.down" }
+      Wire { from: "%surface%.hotcues.2"; to: "tempo_bend.up" }
     }
 
     WiresGroup
@@ -120,6 +129,14 @@ Module
   
       Wire { from: "%surface%.hotcues.3"; to: "hotcues.7.trigger" }
       Wire { from: "%surface%.hotcues.4"; to: "hotcues.8.trigger" }
+    }
+
+    WiresGroup
+    {
+      enabled: !module.shift && (hotcue34PushAction == HotcueAction.tempo_bend)
+
+      Wire { from: "%surface%.hotcues.3"; to: "tempo_bend.down" }
+      Wire { from: "%surface%.hotcues.4"; to: "tempo_bend.up"   }
     }
 
     WiresGroup

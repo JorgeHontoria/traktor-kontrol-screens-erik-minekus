@@ -9,7 +9,7 @@ import '../Widgets' as Widgets
 //------------------------------------------------------------------------------------------------------------------
 
 // the model contains the following roles:
-//  dataType, nodeIconId, nodeName, nrOfSubnodes, coverUrl, artistName, trackName, bpm, key, keyIndex, rating, loadedInDeck, prevPlayed, prelisten
+//  dataType, nodeIconId, nodeName, coverUrl, artistName, trackName, bpm, key, keyIndex, rating, loadedInDeck, prevPlayed, prelisten
 
 Item {
   id: contactDelegate
