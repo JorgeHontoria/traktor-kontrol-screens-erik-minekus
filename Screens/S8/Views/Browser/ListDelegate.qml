@@ -23,12 +23,23 @@ Item {
   readonly property int  textTopMargin:         10 // centers text vertically
   readonly property bool isLoaded:              (model.dataType == BrowserDataType.Track) ? model.loadedInDeck.length > 0 : false
   // visible: !ListView.isCurrentItem
+
   readonly property variant keyText:            ["8B", "3B", "10B", "5B", "12B", "7B", "2B", "9B", "4B", "11B", "6B", "1B",
                                                  "5A", "12A", "7A", "2A", "9A", "4A", "11A", "6A", "1A", "8A", "3A", "10A"]
+
+  property color          keyMatchColor:        textColor
+  property color          tempoMatchColor:      textColor
+  property int            browserFontSize:      prefs.displayMoreItems ? fonts.scale(15) : fonts.scale(16)
+
+  AppProperty { id: masterClockBpm;    path: "app.traktor.masterclock.tempo"; onValueChanged: { updateMatchInfo(); } }
+  AppProperty { id: masterKeyDisplay;  path: "app.traktor.decks." + (masterDeckId.value + 1) + ".content.musical_key"; onValueChanged: { updateMatchInfo(); }}
+  AppProperty { id: masterDeckId;     path: "app.traktor.masterclock.source_id"; onValueChanged: { updateMatchInfo(); } }
 
   height: 39
   anchors.left: parent.left
   anchors.right: parent.right
+
+  Component.onCompleted:  { updateMatchInfo(); }
 
   // container for zebra & track infos
   Rectangle {
@@ -108,6 +119,7 @@ Item {
       width: 305
       color: darkTextColor
       clip: true
+      //text: masterKeyDisplay.value + " - " + model.key
       text: (model.dataType == BrowserDataType.Track) ? model.artistName: ""
       font.pixelSize: fonts.smallFontSize
       elide: Text.ElideRight
@@ -116,15 +128,49 @@ Item {
     // bpm
     Text {
       id: bpmField
-      anchors.left: trackTitleField.right    
+      anchors.right: tempoMatch.left    
       anchors.top: parent.top
-      anchors.topMargin: 8
+      anchors.bottom: parent.bottom
+      anchors.topMargin: textTopMargin
       horizontalAlignment: Text.AlignRight
+      verticalAlignment: Text.AlignVCenter
       width: 44
-      color: textColor
+      color: getListItemKeyTextColor() // (model.dataType == BrowserDataType.Track) ? (((model.key == "none") || (model.key == "None")) ? textColor : parent.colorForKey(model.keyIndex)) : textColor
       clip: true
       text: (model.dataType == BrowserDataType.Track) ? model.bpm.toFixed(0) : ""
       font.pixelSize: fonts.largeFontSize
+    }  
+
+    Item {
+      id : tempoMatch
+      anchors.right:          keyField.left
+      anchors.top:            parent.top
+      anchors.bottom:         parent.bottom
+      width:                  16
+      visible:                prefs.displayMatchGuides
+
+      Widgets.Triangle {
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        width:              8
+        height:             8
+        color:              masterDeckId.value >= 0 ? tempoMatchColor : textColor
+        //color:              tempoMatchColor
+        rotation:           model.bpm > masterClockBpm.value ? 180 : 0
+        visible:            masterDeckId.value >= 0 && Math.round(Math.abs(masterClockBpm.value - model.bpm)) >= 1 && Math.round(Math.abs(masterClockBpm.value - model.bpm)) <= 4
+        antialiasing:       false
+      }
+
+      Rectangle {
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        width:              8
+        height:             width
+        radius:             width * 0.5
+        color:              masterDeckId.value >= 0 ? tempoMatchColor : textColor
+        //color:              tempoMatchColor
+        visible:            masterDeckId.value >= 0 && Math.round(Math.abs(masterClockBpm.value - model.bpm)) < 1
+      }
     }  
 
     function colorForKey(keyIndex) {
@@ -134,16 +180,47 @@ Item {
     // key
     Text {
       id: keyField
-      anchors.left: bpmField.right
+      anchors.right: keyMatchField.left
       anchors.top: parent.top
-      anchors.topMargin: 8
+      anchors.bottom: parent.bottom
+      anchors.topMargin: textTopMargin
       horizontalAlignment: Text.AlignRight
-
+      verticalAlignment: Text.AlignVCenter
       color: (model.dataType == BrowserDataType.Track) ? (((model.key == "none") || (model.key == "None")) ? textColor : parent.colorForKey(model.keyIndex)) : textColor
       width: 44
       clip: true
       text: (model.dataType == BrowserDataType.Track) ? (((model.key == "none") || (model.key == "None")) ? "n.a." : keyText[model.keyIndex]) : ""
       font.pixelSize: fonts.largeFontSize
+    }
+
+    Item {
+      id : keyMatchField
+      anchors.right:          ratingField.left
+      anchors.top:            parent.top
+      anchors.bottom:         parent.bottom
+      visible:                prefs.displayMatchGuides
+      width:                  16
+
+      Widgets.Triangle {
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        width:              8
+        height:             8
+        color:              keyMatchColor
+        rotation:           utils.getMasterKeyOffset(masterKeyDisplay.value, model.key) > 0 ? 180 : 0
+        visible:            masterDeckId.value >= 0 && Math.abs(utils.getMasterKeyOffset(masterKeyDisplay.value, model.key)) > 1 // masterDeckId.value >= 0 // && Math.round(Math.abs(masterClockBpm.value - model.bpm)) >= 1 && Math.round(Math.abs(masterClockBpm.value - model.bpm)) <= 4
+        antialiasing:       false
+      }
+
+      Rectangle {
+        anchors.verticalCenter:   parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        width:              8
+        height:             width
+        radius:             width * 0.5
+        color:              keyMatchColor
+        visible:            masterDeckId.value >= 0 && Math.abs(utils.getMasterKeyOffset(masterKeyDisplay.value, model.key)) <= 1 // masterDeckId.value >= 0 && Math.abs(utils.getMasterKeyOffset(masterKeyDisplay.value, model.key)) == 0
+      }
     }
 
     // track rating
@@ -208,9 +285,17 @@ Item {
             {
               return colors.colorBlack88;
             }
-            else
+            else if (!isCurrentItem)
+            {
+              return colors.colorBlack81;
+            }
+            else if (isCurrentItem)
             {
               return "transparent";
+            }
+            else
+            {
+              return colors.colorBlack60;
             }
           }
         }
@@ -325,6 +410,86 @@ Item {
       return false
     }
     return true
+  }
+
+  function getListItemKeyTextColor() {
+    if (model.dataType != BrowserDataType.Track) {
+      return textColor;
+    }
+
+    var keyOffset = utils.getMasterKeyOffset(qmlBrowser.getMasterKey(), model.key);
+    if (keyOffset == 0) {
+      return colors.color04MusicalKey; // Yellow
+    }
+    if (keyOffset == 1 || keyOffset == -1) {
+      return colors.color02MusicalKey; // Orange
+    }
+    if (keyOffset == 2 || keyOffset == 7) {
+      return colors.color07MusicalKey; // Green
+    }
+    if (keyOffset == -2 || keyOffset == -7) {
+      return colors.color10MusicalKey; // Blue
+    }
+
+    return textColor;
+  }
+
+  function getListItemTextColor() {
+    if (model.dataType != BrowserDataType.Track) {
+      return textColor;
+    }
+    if (model.prevPlayed && !model.prelisten) {
+      return colors.colorGreen50Full;
+    }
+    if (model.loadedInDeck.length > 0) {
+      return colors.colorGreen;
+    }
+
+    return textColor;
+  }
+
+  function updateKeyMatch() {
+
+    if (masterDeckId.value < 0) return;
+    
+    switch (utils.getMasterKeyOffset(masterKeyDisplay.value, model.key)) {
+      case -7:
+      case -2:
+        keyMatchColor = "yellow";
+        break;
+      case -1:
+      case  0:
+      case  1:
+        keyMatchColor = "green";
+        break;
+      case  2:
+      case  7:
+        keyMatchColor = "yellow";
+        break;
+    }
+  }
+
+  function updateTempoMatch() {
+    tempoMatchColor = "green";
+
+    if (masterDeckId.value < 0) return;
+
+    switch (Math.round(Math.abs(masterClockBpm.value - model.bpm))) {
+      case 0:
+      case 1:
+      case 2:
+        tempoMatchColor = "green";
+        break;
+      case 3: 
+      case 4:
+        tempoMatchColor = "yellow";
+        break;
+    }
+  }
+
+  function updateMatchInfo() {
+    updateKeyMatch();
+    updateTempoMatch();
   }
 
   // // cover border
