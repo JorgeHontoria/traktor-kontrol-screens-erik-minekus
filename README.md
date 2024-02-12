@@ -1,4 +1,4 @@
-# Display modifications for the Traktor Kontrol S8/S5/D2 for Traktor Pro 3.10.x and 3.11.x
+# Replacement screens for **Traktor Pro 3.10 and 3.11** and **Kontrol D2/S5/S8 and S4 MK3**
 
 ## Contact:
   Twitter: @tipesoft
@@ -25,11 +25,17 @@
   - Switched BPM coarse and fine adjustment
   - Use the Browse knob to zoom in and out of the waveform
 
+## Editions
+
+[Kontrol Edition](https://github.com/ErikMinekus/traktor-kontrol-screens/tree/master)\
+[Nexus Edition](https://github.com/ErikMinekus/traktor-kontrol-screens/tree/nexus)\
+[Prime Edition](https://github.com/ErikMinekus/traktor-kontrol-screens/tree/prime)
+
 ## How to install
 
 **Mac:**
 
-  - Navigate to /Applications/Native Instruments/Traktor 3
+  - Navigate to /Applications/Native Instruments/Traktor Pro 3
   - Right click Traktor.app, then click Show Package Contents
   - Navigate to Contents/Resources/qml
   - Make a backup of this folder!
@@ -38,7 +44,7 @@
 
 **Windows:**
 
-  - Navigate to C:\Program Files\Native Instruments\Traktor 3\Resources64\qml
+  - Navigate to C:\Program Files\Native Instruments\Traktor Pro 3\Resources64\qml
   - Make a backup of this folder!
   - Replace the CSI, Defines and Screens folders
   - Restart Traktor

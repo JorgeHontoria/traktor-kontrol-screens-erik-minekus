@@ -59,6 +59,14 @@ Module
 
     WiresGroup
     {
+      enabled: !module.shift && (hotcue12PushAction == HotcueAction.tempo_bend)
+
+      Wire { from: "%surface%.hotcues.1"; to: "tempo_bend.down" }
+      Wire { from: "%surface%.hotcues.2"; to: "tempo_bend.up" }
+    }
+
+    WiresGroup
+    {
       enabled: module.shift && (hotcue12ShiftPushAction == HotcueAction.delete_12)
   
       Wire { from: "%surface%.hotcues.1"; to: "hotcues.1.delete" }
@@ -120,6 +128,14 @@ Module
   
       Wire { from: "%surface%.hotcues.3"; to: "hotcues.7.trigger" }
       Wire { from: "%surface%.hotcues.4"; to: "hotcues.8.trigger" }
+    }
+
+    WiresGroup
+    {
+      enabled: !module.shift && (hotcue34PushAction == HotcueAction.tempo_bend)
+
+      Wire { from: "%surface%.hotcues.3"; to: "tempo_bend.down" }
+      Wire { from: "%surface%.hotcues.4"; to: "tempo_bend.up"   }
     }
 
     WiresGroup

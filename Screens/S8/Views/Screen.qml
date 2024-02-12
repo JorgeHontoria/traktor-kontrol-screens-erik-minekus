@@ -146,7 +146,7 @@ Item {
     id: topControls
     fxUnit:        (isLeftScreen ? 0 : 1)
     showHideState: topInfoShown.value ? "show" : "hide"
-    sizeState: deckView.isDawDeckStyleFocus ? "small" : "large"
+    sizeState: "large" // deckView.isDawDeckStyleFocus ? "small" : "large"
   }
 
   // bottom overlay

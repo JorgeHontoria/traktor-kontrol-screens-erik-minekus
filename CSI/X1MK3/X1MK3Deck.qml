@@ -25,16 +25,14 @@ Module
   property int hotcue34ShiftPushAction: 0
 
   property int browseShiftAction: 0
+  property int browseShiftPushAction: 0
+
   property int loopShiftAction: 0
 
   property bool showEndWarning: false
   property bool showSyncWarning: false
   property bool showActiveLoop: false
   property int  bottomLedsDefaultColor: 0
-
-  // Browse encoder actions
-  readonly property int browse_tree:      0
-  readonly property int browse_favorites: 1
 
   // Loop encoder actions
   readonly property int beatjump_loop:      0
@@ -348,18 +346,37 @@ Module
       Wire { from: "%surface%.browse.push"; to: TriggerPropertyAdapter { path: "app.traktor.decks." + module.deckIdx + ".load.selected" } }
     }
 
-    Wire
+    WiresGroup
     {
-      from: "%surface%.browse.turn"
-      to: "browser.favorites_navigation.turn"
-      enabled: module.shift && (browseShiftAction == browse_favorites)
-    }
+      enabled: module.shift
 
-    Wire
-    {
-      from: "%surface%.browse"
-      to: "browser.tree_navigation"
-      enabled: module.shift && (browseShiftAction == browse_tree)
+      Wire
+      {
+        from: "%surface%.browse.turn"
+        to: "browser.favorites_navigation.turn"
+        enabled: browseShiftAction == BrowseEncoderAction.browse_favorites
+      }
+
+      Wire
+      {
+        from: "%surface%.browse"
+        to: "browser.tree_navigation"
+        enabled: browseShiftAction == BrowseEncoderAction.browse_tree
+      }
+
+      Wire
+      {
+        from: "%surface%.browse.push"
+        to: "browser.tree_navigation.push"
+        enabled: browseShiftPushAction == BrowseEncoderAction.browse_expand_tree
+      }
+
+      Wire
+      {
+        from: "%surface%.browse.push"
+        to: "browser.full_screen"
+        enabled: browseShiftPushAction == BrowseEncoderAction.browse_toggle_full_screen
+      }
     }
   }
 }
