@@ -116,7 +116,7 @@ Item {
     anchors.bottom:      parent.bottom
     anchors.left:        browserIconArrow.right
     anchors.right:       deckLetter.left
-    anchors.leftMargin:   6
+    anchors.leftMargin:  6
     anchors.rightMargin: spaceToDeckLetter
     clip:                true
 

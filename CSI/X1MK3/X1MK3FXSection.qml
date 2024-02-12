@@ -55,7 +55,6 @@ Module
     enabled: module.active
     from: "%surface%.mode"
     to: ButtonScriptAdapter {
-            color: Color.LightOrange
             onPress: {
               switch (module.layer)
               {

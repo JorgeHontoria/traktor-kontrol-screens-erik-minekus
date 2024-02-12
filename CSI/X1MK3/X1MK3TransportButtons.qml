@@ -12,8 +12,10 @@ Module
   property int nudgeShiftPushAction: 0
 
   // Nudge buttons actions
-  readonly property int nudgeTempoBend: 0
-  readonly property int nudgeBeatjump:  1
+  readonly property int nudgeTempoBend:            0
+  readonly property int nudgeBeatjump:             1
+  readonly property int nudgeTriggerHotcue_56:     2
+  readonly property int nudgeDeleteHotcue_56:      3
 
   TransportSection
   {
@@ -30,6 +32,7 @@ Module
   Beatgrid        { name: "beatgrid";   channel: module.deckIdx }
   ButtonBeatjump  { name: "beatjump";   channel: module.deckIdx }
   ButtonTempoBend { name: "tempo_bend"; channel: module.deckIdx }
+  Hotcues         { name: "hotcues";    channel: module.deckIdx }
 
   SwitchTrigger { name: "sync_inverter" }
   
@@ -72,7 +75,7 @@ Module
 
     WiresGroup
     {
-      enabled: !module.shift && nudgePushAction == nudgeBeatjump
+      enabled: !module.shift && (nudgePushAction == nudgeBeatjump)
 
       Wire { from: DirectPropertyAdapter { path: "mapping.settings.nudge_push_size"; input: false } to: "beatjump.size" }
 
@@ -82,12 +85,28 @@ Module
 
     WiresGroup
     {
-      enabled: module.shift && nudgeShiftPushAction == nudgeBeatjump
+      enabled: !module.shift && (nudgePushAction == nudgeTriggerHotcue_56)
+
+      Wire { from: "%surface%.nudge_slow"; to: "hotcues.5.trigger" }
+      Wire { from: "%surface%.nudge_fast"; to: "hotcues.6.trigger" }
+    }
+
+    WiresGroup
+    {
+      enabled: module.shift && (nudgeShiftPushAction == nudgeBeatjump)
 
       Wire { from: DirectPropertyAdapter { path: "mapping.settings.nudge_shiftpush_size"; input: false } to: "beatjump.size" }
 
       Wire { from: "%surface%.nudge_slow"; to: "beatjump.backward" }
       Wire { from: "%surface%.nudge_fast"; to: "beatjump.forward"  }
+    }
+
+    WiresGroup
+    {
+      enabled: module.shift && (nudgeShiftPushAction == nudgeDeleteHotcue_56)
+
+      Wire { from: "%surface%.nudge_slow"; to: "hotcues.5.delete" }
+      Wire { from: "%surface%.nudge_fast"; to: "hotcues.6.delete" }
     }
   }
 }

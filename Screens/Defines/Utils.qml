@@ -52,7 +52,9 @@ QtObject {
       case getKeyOffset(+masterKeyMatches[1] + 7): return 7;
       case getKeyOffset(+masterKeyMatches[1] - 7): return -7;
     }
- }
+
+    return null;
+  }
 
   function convertToCamelot(keyToConvert)
   {

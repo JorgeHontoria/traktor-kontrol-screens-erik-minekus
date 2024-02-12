@@ -7,7 +7,8 @@ Item {
   property int fxUnitId: 0
 
   property          string  fxUnitName:  "FX UNIT " + (fxUnitId + 1)   // used to compose the selcted fxunit name for header tab
-  readonly property variant headerNames: [fxUnitName, fxSelectProp1.description, fxSelectProp2.description, fxSelectProp3.description]
+  readonly property variant headerNames: getHeaderTexts()
+
   readonly property int macroEffectChar:  0x00B6
   readonly property bool    hasFocus:    (fxUnitId == fxSelect.fxUnitId)
 
@@ -15,7 +16,8 @@ Item {
   AppProperty { id: fxSelectProp2;    path: "app.traktor.fx." + (fxUnitId + 1) + ".select.2" }
   AppProperty { id: fxSelectProp3;    path: "app.traktor.fx." + (fxUnitId + 1) + ".select.3" }
   AppProperty { id: fxViewSelectProp; path: "app.traktor.fx." + (fxUnitId + 1) + ".type"     }
-
+  AppProperty { id: patternPlayerKitSelection; path: "app.traktor.fx." + (fxUnitId + 1) + ".pattern_player.kit_shortname" }
+  AppProperty { id: patternPlayerEnabled; path: "app.traktor.settings.pro.plus.pattern_player" }
 
   Row {
     spacing: 1
@@ -68,5 +70,15 @@ Item {
         }
       }
     }
+  }
+
+  function getHeaderTexts()
+  {
+    if (patternPlayerEnabled.value && fxViewSelectProp.value == FxType.PatternPlayer)
+    {
+      return [fxUnitName, patternPlayerKitSelection.description, "", ""];
+    }
+
+    return [fxUnitName, fxSelectProp1.description, fxSelectProp2.description, fxSelectProp3.description];
   }
 }

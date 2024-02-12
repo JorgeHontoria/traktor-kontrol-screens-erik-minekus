@@ -47,7 +47,6 @@ Text {
   //--------------------------------------------------------------------------------------------------------------------
   AppProperty { id: propDeckType;       path: "app.traktor.decks." + (deckId+1) + ".type" }
   AppProperty { id: primaryKey;         path: "app.traktor.decks." + (deckId+1) + ".track.content.entry_key" }
-  AppProperty { id: keyDisplay;         path: "app.traktor.decks." + (deckId+1) + ".track.key.resulting.precise" }
   
   AppProperty { id: propTitle;          path: "app.traktor.decks." + (deckId+1) + ".content.title" }
   AppProperty { id: propArtist;         path: "app.traktor.decks." + (deckId+1) + ".content.artist" }
@@ -98,7 +97,7 @@ Text {
                                             "trackLength", "bitrate", "bpmTrack", "gain", "elapsedTime", "remainingTime", 
                                             "beats", "beatsToCue", "bpm", "tempo", "key", "keyText", "comment", "comment2",
                                             "remixer", "pitchRange", "bpmStable", "tempoStable", "sync", "off", "off", "bpmTrack",
-                                            "remixBeats", "remixQuantize", "keyDisplay"]
+                                            "remixBeats", "remixQuantize"]
 
 /*
   readonly property variant stateMapping:  [0:  "title",          1: "artist",       2:  "release", 
@@ -111,7 +110,7 @@ Text {
                                             21: "remixer",       22: "pitchRange",  23: "bpmStable", 
                                             24: "tempoStable",   25: "sync",        26: "off", 
                                             27: "off",           28: "bpmTrack"     29: "remixBeats"
-                                            30: "remixQuantize", 31: "keyDisplay"]
+                                            30: "remixQuantize"]
 */
   //--------------------------------------------------------------------------------------------------------------------
   //  STATES FOR THE LABELS IN THE DECK HEADER
@@ -274,11 +273,6 @@ Text {
       name: "remixQuantize";
       PropertyChanges { target: header_text; font.family: fontForNumber; 
                         text:  (!isLoaded) ? "" : ((propRemixIsQuantize.value)? "Q " + propRemixQuantize.description : "Off"); }
-    },
-    State { 
-      name: "keyDisplay"; 
-      PropertyChanges { target: header_text; font.family: fontForNumber;
-                        text: (!isLoaded)?"":(prefs.camelotKey ? utils.convertToCamelot(keyDisplay.value) : keyDisplay.value); }
     }
   ] 
 

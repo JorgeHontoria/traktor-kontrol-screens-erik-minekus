@@ -23,6 +23,8 @@ Module
   property int hotcue34ShiftPushAction: 0
 
   property int browseShiftAction: 0
+  property int browseShiftPushAction: 0
+
   property int loopShiftAction: 0
 
   property bool showEndWarning: false
@@ -53,6 +55,7 @@ Module
 
     loopShiftAction: module.loopShiftAction
     browseShiftAction: module.browseShiftAction
+    browseShiftPushAction: module.browseShiftPushAction
 
     showEndWarning: module.showEndWarning
     showSyncWarning: module.showSyncWarning
@@ -83,6 +86,7 @@ Module
 
     loopShiftAction: module.loopShiftAction
     browseShiftAction: module.browseShiftAction
+    browseShiftPushAction: module.browseShiftPushAction
 
     showEndWarning: module.showEndWarning
     showSyncWarning: module.showSyncWarning
@@ -113,6 +117,7 @@ Module
 
     loopShiftAction: module.loopShiftAction
     browseShiftAction: module.browseShiftAction
+    browseShiftPushAction: module.browseShiftPushAction
 
     showEndWarning: module.showEndWarning
     showSyncWarning: module.showSyncWarning
@@ -143,6 +148,7 @@ Module
 
     loopShiftAction: module.loopShiftAction
     browseShiftAction: module.browseShiftAction
+    browseShiftPushAction: module.browseShiftPushAction
 
     showEndWarning: module.showEndWarning
     showSyncWarning: module.showSyncWarning
